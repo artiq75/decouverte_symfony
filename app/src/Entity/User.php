@@ -4,9 +4,9 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -17,13 +17,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $password = null;
+
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
     public function getId(): ?int
     {
@@ -80,8 +87,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 */
 	public function getRoles(): array 
     {
-        return ['ROLE_USER'];
-	}
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
 	
 	/**
 	 * Removes sensitive data from the user.
@@ -92,7 +103,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 */
 	public function eraseCredentials() 
     {
-	}
+    }
 	
 	/**
 	 * Returns the identifier for this user (e.g. username or email address).
@@ -101,5 +112,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	public function getUserIdentifier(): string 
     {
         return $this->email;
-	}
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
 }

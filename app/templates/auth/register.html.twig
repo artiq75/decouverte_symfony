@@ -1,0 +1,23 @@
+{% extends 'auth.html.twig' %}
+
+{% block title "S'inscrire" %}
+
+{% block body %}
+  <main class="container">
+
+    <h1>S'inscrire</h1>
+
+    {{ form_start(form) }}
+
+    {{ form_widget(form) }}
+
+    <button class="btn btn-primary mb-2" type="submit">S'incrire</button>
+
+    <p>
+      <a href="{{ path('login') }}">Je suis déjà inscrit</a>
+    </p>
+    
+    {{ form_end(form) }}
+
+  </main>
+{% endblock %}

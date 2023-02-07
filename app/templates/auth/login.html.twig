@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'auth.html.twig' %}
 
 {% block title 'Se connecter' %}
 
@@ -27,8 +27,12 @@
       <input type="hidden" name="_target_path" value="{{ path('home') }}">
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-      <button class="btn btn-primary" type="submit">Se connecter</button>
+      <button class="btn btn-primary mb-2" type="submit">Se connecter</button>
       
+      <p>
+        <a href="{{ path('register') }}">Je suis pas encore inscrit</a>
+      </p>
+
     </form>
   </main>
 {% endblock %}
