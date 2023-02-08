@@ -19,7 +19,7 @@ class HousingAdminController extends AbstractController
     public function index(HousingRepository $housingRepository): Response
     {
         return $this->render('admin/housings/index.html.twig', [
-            'housings' => $housingRepository->findAll(),
+            'housings' => $housingRepository->findAllAssocietedAdvertiser($this->getUser()),
         ]);
     }
 
@@ -31,6 +31,7 @@ class HousingAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $housing->setUser($this->getUser());
             $housingRepository->save($housing, true);
 
             return $this->redirectToRoute('admin.housing.index', [], Response::HTTP_SEE_OTHER);

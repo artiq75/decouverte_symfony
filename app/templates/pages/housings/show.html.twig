@@ -5,7 +5,9 @@
   <main class="container">
     <h1>{{ housing.title }}</h1>
 
-    <p>{{ housing.description | up_down }}</p>
+    <p>chez {{ housing.user.name }}</p>
+
+    <p>{{ housing.description }}</p>
 
     <table class="table table-striped">
       <tr>

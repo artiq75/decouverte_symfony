@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -31,6 +33,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'json')]
     private array $roles = [];
+
+    public bool $isAdvertiser = false;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Housing::class, orphanRemoval: true)]
+    private Collection $housings;
+
+    public function __construct()
+    {
+        $this->housings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -117,6 +129,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Housing>
+     */
+    public function getHousings(): Collection
+    {
+        return $this->housings;
+    }
+
+    public function addHousing(Housing $housing): self
+    {
+        if (!$this->housings->contains($housing)) {
+            $this->housings->add($housing);
+            $housing->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHousing(Housing $housing): self
+    {
+        if ($this->housings->removeElement($housing)) {
+            // set the owning side to null (unless already changed)
+            if ($housing->getUser() === $this) {
+                $housing->setUser(null);
+            }
+        }
 
         return $this;
     }

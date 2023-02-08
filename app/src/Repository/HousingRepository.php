@@ -3,8 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Housing;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Housing>
@@ -21,6 +24,33 @@ class HousingRepository extends ServiceEntityRepository
         parent::__construct($registry, Housing::class);
     }
 
+    /**
+     * Renvoie tout les logments de l'annonceur actuelle
+     * 
+     * @return Housing[]
+     */
+    public function findAllAssocietedAdvertiser(UserInterface $user): array
+    {
+        return $this->createQueryBuilder('h')
+            ->innerJoin('h.user', 'user', Join::WITH, 'user.id = :id')
+            ->setParameter('id', $user->getId())
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Renvoie tout les logments publier
+     * 
+     * @return Housing[]
+     */
+    public function findAllPublished(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.is_published = 1')
+            ->getQuery()
+            ->getResult();
+    }
+    
     public function save(Housing $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -37,19 +67,6 @@ class HousingRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
-    }
-
-    /**
-     * Renvoie tout les logments publier
-     * 
-     * @return Housing[]
-     */
-    public function findAllPublished(): array
-    {
-        return $this->createQueryBuilder('p')
-            ->where('p.is_published = 1')
-            ->getQuery()
-            ->getResult();
     }
 
 //    /**

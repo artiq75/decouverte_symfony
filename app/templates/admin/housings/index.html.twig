@@ -9,40 +9,40 @@
 
         <a class="btn btn-primary mb-2" href="{{ path('admin.housing.new') }}">Ajouter un nouveau logement</a>
 
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Prix</th>
-                    <th>Début de disponibilité</th>
-                    <th>Fin de disponibilité</th>
-                    <th>Is_published</th>
-                    <th>Catégorie</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for housing in housings %}
-                <tr>
-                    <td>{{ housing.id }}</td>
-                    <td>{{ housing.formatedPrice }}</td>
-                    <td>{{ housing.availabilityStart ? housing.availabilityStart|date('Y-m-d') : '' }}</td>
-                    <td>{{ housing.availabilityEnd ? housing.availabilityEnd|date('Y-m-d') : '' }}</td>
-                    <td>{{ housing.publishedText }}</td>
-                    <td>{{ housing.category.name }}</td>
-                    <td class="d-flex gap-1">
-                        <a class="btn btn-info" href="{{ path('housing.show', {slug: housing.slug, id: housing.id}) }}">Voir</a>
-                        <a class="btn btn-primary" href="{{ path('admin.housing.edit', {id: housing.id}) }}">Editer</a>
-                       {{ include('admin/housings/_delete_form.html.twig', {housing: housing}) }}
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="13">Vous n'avez publier aucun logement</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {% if not housings %}
+            <h2>Vous n'avez publier aucun logement</h2>
+        {% else %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Prix</th>
+                        <th>Début de disponibilité</th>
+                        <th>Fin de disponibilité</th>
+                        <th>Publier ?</th>
+                        <th>Catégorie</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for housing in housings %}
+                    <tr>
+                        <td>{{ housing.id }}</td>
+                        <td>{{ housing.formatedPrice }}</td>
+                        <td>{{ housing.availabilityStart ? housing.availabilityStart|date('Y-m-d') : '' }}</td>
+                        <td>{{ housing.availabilityEnd ? housing.availabilityEnd|date('Y-m-d') : '' }}</td>
+                        <td>{{ housing.publishedText }}</td>
+                        <td>{{ housing.category.name }}</td>
+                        <td class="d-flex gap-1">
+                            <a class="btn btn-info" href="{{ path('housing.show', {slug: housing.slug, id: housing.id}) }}">Voir</a>
+                            <a class="btn btn-primary" href="{{ path('admin.housing.edit', {id: housing.id}) }}">Editer</a>
+                            {{ include('admin/housings/_delete_form.html.twig', {housing: housing}) }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
 
     </main>
 {% endblock %}
