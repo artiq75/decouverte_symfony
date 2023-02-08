@@ -9,33 +9,27 @@
 
         <a class="btn btn-primary mb-2" href="{{ path('admin.housing.new') }}">Ajouter un nouveau logement</a>
 
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Title</th>
-                    <th>Price</th>
-                    <th>Availability_start</th>
-                    <th>Availability_end</th>
+                    <th>Prix</th>
+                    <th>Début de disponibilité</th>
+                    <th>Fin de disponibilité</th>
                     <th>Is_published</th>
-                    <th>City</th>
-                    <th>Region</th>
-                    <th>Country</th>
-                    <th>actions</th>
+                    <th>Catégorie</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
             {% for housing in housings %}
                 <tr>
                     <td>{{ housing.id }}</td>
-                    <td>{{ housing.title }}</td>
                     <td>{{ housing.formatedPrice }}</td>
                     <td>{{ housing.availabilityStart ? housing.availabilityStart|date('Y-m-d') : '' }}</td>
                     <td>{{ housing.availabilityEnd ? housing.availabilityEnd|date('Y-m-d') : '' }}</td>
                     <td>{{ housing.publishedText }}</td>
-                    <td>{{ housing.city }}</td>
-                    <td>{{ housing.region }}</td>
-                    <td>{{ housing.country }}</td>
+                    <td>{{ housing.category.name }}</td>
                     <td class="d-flex gap-1">
                         <a class="btn btn-info" href="{{ path('housing.show', {slug: housing.slug, id: housing.id}) }}">Voir</a>
                         <a class="btn btn-primary" href="{{ path('admin.housing.edit', {id: housing.id}) }}">Editer</a>

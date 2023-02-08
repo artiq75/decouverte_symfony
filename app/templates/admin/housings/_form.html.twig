@@ -19,7 +19,10 @@
         <div class="col-4">{{ form_row(form.country) }}</div>
     </div>
 
+    {{ form_row(form.category) }}
+    
     {{ form_row(form.description) }}
+
     {{ form_row(form.is_published) }}
 
     <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>

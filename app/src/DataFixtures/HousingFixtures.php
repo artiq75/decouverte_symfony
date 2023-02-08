@@ -3,18 +3,29 @@
 namespace App\DataFixtures;
 
 use App\Entity\Housing;
+use App\Repository\CategoryRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 
-class HousingFixture extends Fixture
+class HousingFixtures extends Fixture implements DependentFixtureInterface
 {
     private Generator $faker;
 
-    public function __construct()
+    public function __construct(
+        private CategoryRepository $categoryRepository
+    )
     {
         $this->faker = Factory::create('fr_FR');
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            CategoryFixtures::class
+        ];
     }
 
     public function load(ObjectManager $manager): void
@@ -34,10 +45,10 @@ class HousingFixture extends Fixture
                 ->setCity($this->faker->city)
                 ->setRegion($this->faker->region())
                 ->setCountry('France')
-                ->setIsPublished($this->faker->numberBetween(0, 1));
+                ->setIsPublished($this->faker->numberBetween(0, 1))
+                ->setCategory($this->faker->randomElement($this->categoryRepository->findAll()));
 
             $manager->persist($housing);
-
         }
 
         $manager->flush();
