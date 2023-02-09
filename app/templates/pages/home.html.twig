@@ -5,10 +5,17 @@
   <main class="container">
       <div class="row gap-3">
         {% for housing in housings %}
-          <a class="col-2 card" href="{{ path('housing.show', {slug: housing.slug, id: housing.id}) }}">
-            <article>
-              <p>{{ housing.address }}</p>
-              <p><strong>{{ housing.formatedPrice }}</strong> par nuit</p>
+          <a class="col-2" href="{{ path('housing.show', {slug: housing.slug, id: housing.id}) }}">
+            <article class="card">
+              {% if housing.images is not empty %}
+                <img src="{{ vich_uploader_asset(housing.firstImage) }}" alt="" class="card-img-top">
+              {% endif %}
+              <div class="card-body">
+                <div class="body-text">
+                  <p class="card-title">{{ housing.address }}</p>
+                  <p><strong>{{ housing.formatedPrice }}</strong> par nuit</p>
+                </div>
+              </div>
             </article>
           </a>
       {% endfor %}

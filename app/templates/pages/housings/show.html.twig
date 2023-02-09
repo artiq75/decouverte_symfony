@@ -4,6 +4,11 @@
   
   <main class="container">
     <h1>{{ housing.title }}</h1>
+    <p>{{ housing.fullAddress }}</p>
+
+    {% if housing.images is not empty %}
+      <img src="{{ vich_uploader_asset(housing.firstImage) }}" alt="" class="card-img-top">
+    {% endif %}
 
     <h2>chez {{ housing.user.name}}</h2>
 
