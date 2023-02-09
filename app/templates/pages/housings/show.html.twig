@@ -5,24 +5,28 @@
   <main class="container">
     <h1>{{ housing.title }}</h1>
 
-    <p>chez {{ housing.user.name }}</p>
+    <h2>chez {{ housing.user.name}}</h2>
+
+    <p>{{ housing.rooms }} chambre . {{ housing.beds }} lits</p>
 
     <p>{{ housing.description }}</p>
-
-    <table class="table table-striped">
-      <tr>
-        <td>Prix</td>
-        <td>{{ housing.formatedPrice }}</td>
-      </tr>
-      <tr>
-        <td>Chambres</td>
-        <td>{{ housing.rooms }}</td>
-      </tr>
-      <tr>
-        <td>Lits</td>
-        <td>{{ housing.beds }}</td>
-      </tr>
-    </table>
   </main>
+
+  <aside class="container">
+    <h2>{{ housing.comments | length }} Commentaires</h2>
+
+    <div class="row gap-2">
+      {% for comment in housing.comments %}
+        <div class="card">
+          <div class="card-header">
+            {{ comment.user.name }}
+          </div>
+          <div class="card-body">
+          <div class="card-text">{{ comment.message }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </aside>
   
 {% endblock %}

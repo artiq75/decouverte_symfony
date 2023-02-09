@@ -39,9 +39,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Housing::class, orphanRemoval: true)]
     private Collection $housings;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class, orphanRemoval: true)]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->housings = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -98,13 +102,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 * @return array<string>
 	 */
 	public function getRoles(): array 
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
+                   {
+                       $roles = $this->roles;
+                       // guarantee every user at least has ROLE_USER
+                       $roles[] = 'ROLE_USER';
+               
+                       return array_unique($roles);
+                   }
 	
 	/**
 	 * Removes sensitive data from the user.
@@ -114,17 +118,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 * @return mixed
 	 */
 	public function eraseCredentials() 
-    {
-    }
+                   {
+                   }
 	
 	/**
 	 * Returns the identifier for this user (e.g. username or email address).
 	 * @return string
 	 */
 	public function getUserIdentifier(): string 
-    {
-        return $this->email;
-    }
+                   {
+                       return $this->email;
+                   }
 
     public function setRoles(array $roles): self
     {
@@ -157,6 +161,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($housing->getUser() === $this) {
                 $housing->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
             }
         }
 
