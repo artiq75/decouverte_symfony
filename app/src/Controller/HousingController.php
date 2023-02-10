@@ -15,7 +15,7 @@ class HousingController extends AbstractController
   ])]
   public function show(Housing $housing): Response
   {
-    return $this->render('pages/housings/show.html.twig', [
+    return $this->render('pages/housing/show.html.twig', [
       'housing' => $housing
     ]);
   }

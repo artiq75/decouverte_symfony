@@ -1,4 +1,0 @@
-<form method="post" action="{{ path('admin.housing.delete', {id: housing.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer ce logement?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ housing.id) }}">
-    <button class="btn btn-danger">{{ button_label|default('Supprimer') }}</button>
-</form>
