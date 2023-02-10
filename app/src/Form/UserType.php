@@ -23,7 +23,9 @@ class UserType extends AbstractType
                 'second_options' => ['label' => 'Confirmation du mot de passe']
             ])
             ->add('isAdvertiser', CheckboxType::class, [
+                'mapped' => false,
                 'required' => true,
+                'value' => false,
                 'label' => 'Je suis un annonceur'
             ])
         ;

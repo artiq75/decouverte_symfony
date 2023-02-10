@@ -41,7 +41,7 @@ class AuthController extends AbstractController
       $password = $hasher->hashPassword($user, $user->getPassword());
       $user->setPassword($password);
 
-      if ($user->isAdvertiser) {
+      if ($form->get('isAdvertiser')->getData()) {
         $user->setRoles(['ROLE_ADVERTISER']);
       }
 

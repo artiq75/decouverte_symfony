@@ -34,8 +34,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
-    public bool $isAdvertiser = false;
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Housing::class, orphanRemoval: true)]
     private Collection $housings;
 

@@ -6,7 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Housing;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
-use App\Repository\HousingRepository;
+use App\Security\Voter\CommentVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,7 +52,7 @@ class CommentController extends AbstractController
   #[Route('/commentaires/{id}', name: 'comment.delete', methods: ['POST'])]
   public function delete(Comment $comment, Request $request): Response
   {
-    $this->denyAccessUnlessGranted('ROLE_USER');
+    $this->denyAccessUnlessGranted(CommentVoter::DELETE, $comment);
 
     if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
       $this->repository->remove($comment, true);
