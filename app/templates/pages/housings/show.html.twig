@@ -7,7 +7,18 @@
     <p>{{ housing.fullAddress }}</p>
 
     {% if housing.images is not empty %}
-      <img src="{{ vich_uploader_asset(housing.firstImage) }}" alt="" class="card-img-top">
+      <div class="images">
+        {% if housing.thumbnail %}
+          <img src="{{ vich_uploader_asset(housing.thumbnail) }}" alt="" class="card-img-top">
+        {% endif %}
+        <div class="images-gallery">
+          {% for image in housing.images %}
+            {% if not image.isThumbnail %}
+              <img src="{{ vich_uploader_asset(image) }}" alt="" class="card-img-top">
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
     {% endif %}
 
     <h2>chez {{ housing.user.name}}</h2>

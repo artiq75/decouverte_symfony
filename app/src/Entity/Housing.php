@@ -303,6 +303,13 @@ class Housing
         return $this->images;
     }
 
+    public function getThumbnail(): ?Image
+    {
+        return $this->images->findFirst(function (int $key , Image $image): bool {
+            return $image->isIsThumbnail();
+        });
+    }
+
     public function addImage(Image $image): self
     {
         if (!$this->images->contains($image)) {

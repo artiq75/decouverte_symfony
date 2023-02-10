@@ -2,3 +2,22 @@ a.card {
   text-decoration: none;
   color: inherit;
 }
+
+.images img {
+  border-radius: 7px;
+  width: 100%;
+  height: 100%;
+}
+
+.images {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.images-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+}
