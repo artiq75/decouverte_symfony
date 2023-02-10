@@ -16,6 +16,10 @@ class ImageType extends AbstractType
             ->add('file', VichImageType::class, [
                 'allow_delete' => false,
                 'download_uri' => false,
+                'label' => 'Image'
+            ])
+            ->add('is_thumbnail', null, [
+                'label' => 'Marquer comme vignette'
             ]);
     }
 

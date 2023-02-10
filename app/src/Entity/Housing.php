@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\HousingRepository;
+use App\Validator as CustomValidator;
 use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -64,6 +65,7 @@ class Housing
     private Collection $comments;
 
     #[ORM\OneToMany(mappedBy: 'housing', targetEntity: Image::class, orphanRemoval: true, cascade: ['persist'])]
+    #[CustomValidator\UniqueThumbnail]
     private Collection $images;
 
     public function __construct()

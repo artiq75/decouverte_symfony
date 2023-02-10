@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ImageRepository;
+use App\Validator\UniqueThumbnailValidtor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -29,6 +30,9 @@ class Image
 
     #[Vich\UploadableField(mapping: 'housing_images', fileNameProperty: 'name')]
     private ?File $file = null;
+
+    #[ORM\Column(options: ['default' => false])]
+    private bool $is_thumbnail = false;
 
     public function getId(): ?int
     {
@@ -83,5 +87,17 @@ class Image
     public function getFile(): ?File
     {
         return $this->file;
+    }
+
+    public function isIsThumbnail(): ?bool
+    {
+        return $this->is_thumbnail;
+    }
+
+    public function setIsThumbnail(bool $is_thumbnail): self
+    {
+        $this->is_thumbnail = $is_thumbnail;
+
+        return $this;
     }
 }
