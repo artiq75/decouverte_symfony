@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: HousingRepository::class)]
 class Housing
@@ -66,12 +67,17 @@ class Housing
 
     #[ORM\OneToMany(mappedBy: 'housing', targetEntity: Image::class, orphanRemoval: true, cascade: ['persist'])]
     #[CustomValidator\UniqueThumbnail]
+    // #[Assert\Count(min: 5, max: 5)]
     private Collection $images;
+
+    #[ORM\OneToMany(mappedBy: 'housing', targetEntity: Booking::class, orphanRemoval: true, cascade: ['persist'])]
+    private Collection $bookings;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -326,6 +332,36 @@ class Housing
             // set the owning side to null (unless already changed)
             if ($image->getHousing() === $this) {
                 $image->setHousing(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Booking>
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings->add($booking);
+            $booking->setHousing($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->removeElement($booking)) {
+            // set the owning side to null (unless already changed)
+            if ($booking->getHousing() === $this) {
+                $booking->setHousing(null);
             }
         }
 

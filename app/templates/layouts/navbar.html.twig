@@ -3,8 +3,14 @@
     <a href="{{ path('home') }}" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">Airbnb</a>
 
     <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+
+      {% if app.user %}
+        <li>
+          <a href="{{ path('booking.index') }}" class="nav-link px-2 link-dark">Réservations</a>
+        </li>
+      {% endif %}
       
-      {% if is_granted('ROLE_ADMIN') %}
+      {% if is_granted('ROLE_ADVERTISER') %}
         <li><a href="{{ path('admin.housing.index') }}" class="nav-link px-2 link-dark">Admin</a></li>
       {% endif %}
 

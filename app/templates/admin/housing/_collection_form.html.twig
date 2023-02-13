@@ -5,7 +5,6 @@
         {% for image in form.images %}
             <li>
               {{ form_widget(image) }}
-              {{ form_errors(form) }}
             </li>
         {% endfor %}
     </ul>

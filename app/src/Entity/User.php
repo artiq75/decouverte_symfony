@@ -40,10 +40,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Booking::class, orphanRemoval: true)]
+    private Collection $bookings;
+
     public function __construct()
     {
         $this->housings = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,13 +104,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 * @return array<string>
 	 */
 	public function getRoles(): array 
-                   {
-                       $roles = $this->roles;
-                       // guarantee every user at least has ROLE_USER
-                       $roles[] = 'ROLE_USER';
-               
-                       return array_unique($roles);
-                   }
+                                  {
+                                      $roles = $this->roles;
+                                      // guarantee every user at least has ROLE_USER
+                                      $roles[] = 'ROLE_USER';
+                              
+                                      return array_unique($roles);
+                                  }
 	
 	/**
 	 * Removes sensitive data from the user.
@@ -116,17 +120,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	 * @return mixed
 	 */
 	public function eraseCredentials() 
-                   {
-                   }
+                                  {
+                                  }
 	
 	/**
 	 * Returns the identifier for this user (e.g. username or email address).
 	 * @return string
 	 */
 	public function getUserIdentifier(): string 
-                   {
-                       return $this->email;
-                   }
+                                  {
+                                      return $this->email;
+                                  }
 
     public function setRoles(array $roles): self
     {
@@ -189,6 +193,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($comment->getUser() === $this) {
                 $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Booking>
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings->add($booking);
+            $booking->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->removeElement($booking)) {
+            // set the owning side to null (unless already changed)
+            if ($booking->getUser() === $this) {
+                $booking->setUser(null);
             }
         }
 

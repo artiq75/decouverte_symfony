@@ -33,7 +33,8 @@ class HousingType extends AbstractType
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name'
-            ])
+                ])
+            ->add('is_published')
             ->add('images', CollectionType::class, [
                 'entry_type' => ImageType::class,
                 'entry_options' => ['label' => false],
@@ -41,7 +42,6 @@ class HousingType extends AbstractType
                 'allow_delete' => true,
                 "by_reference" => false
             ])
-            ->add('is_published')
         ;
     }
 
